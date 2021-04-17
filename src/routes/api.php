@@ -25,4 +25,12 @@ return function (App $app) {
      */
     $app->post('/currencies', 'App\Controllers\CurrencyController:addCurrency');
 
+    /**
+     * Remover Moeda - Endpoint
+     * 
+     * @url /currencies/{currency}
+     * @method DELETE
+     */
+    $app->delete('/currencies/{currency}', 'App\Controllers\CurrencyController:removeCurrency');
+
 };

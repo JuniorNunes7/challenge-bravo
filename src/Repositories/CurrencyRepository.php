@@ -34,6 +34,18 @@ class CurrencyRepository extends BaseRepository
     }
 
     /**
+     * Remove a moeda no banco de dados
+     *
+     * @param string $currency
+     * @return bool
+     */
+    public function removeCurrency(string $currency) : bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM currencies WHERE currency=?');
+        return $stmt->execute([$currency]);
+    }
+
+    /**
      * Verifica se o código da moeda já está registrado
      *
      * @param string $currency

@@ -76,4 +76,37 @@ class CurrencyController extends BaseController
 
         return ResponseService::makeResponse($response, 200, ['message' => 'A moeda foi adicionada com sucesso!']);
     }
+
+    /**
+     * Remove uma moeda do banco
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function removeCurrency(Request $request, Response $response, array $args) : Response
+    {
+        $currency = $args['currency'];
+        
+        // Não permitir remover a moeda USD
+        if ($currency === 'USD') {
+            return ResponseService::makeResponse($response, 400, ['message' => 'Não é possível remover a moeda USD!']);    
+        }
+        
+        // Verificando se a moeda está registrada no banco
+        $currencyRepo = new CurrencyRepository($this->app->db);
+        if (!$currencyRepo->checkCurrencyExists($currency)) {
+            return ResponseService::makeResponse($response, 400, ['errors' => 'A moeda "' . $currency . '" não foi encontrada!']);
+        }
+
+        // Removendo moeda
+        $removeStatus = $currencyRepo->removeCurrency($currency);
+
+        // Retornando erro, caso não consiga remover o registro
+        if (!$removeStatus) {
+            return ResponseService::makeResponse($response, 500, ['message' => 'Erro ao remover a moeda!']);    
+        }
+
+        return ResponseService::makeResponse($response, 200, ['message' => 'A moeda foi removida com sucesso!']);
+    }
 }
