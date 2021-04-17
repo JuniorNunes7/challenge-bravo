@@ -30,6 +30,7 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "tests": "vendor/bin/phpunit --do-not-cache-result"
+        "tests": "vendor/bin/phpunit --do-not-cache-result",
+        "migrate": "php database/migrations/create_currencies_table.php && php database/seeds/currencies_seed.php"
     }
 }

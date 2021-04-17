@@ -1,6 +1,7 @@
 <?php
 
 use Slim\Factory\AppFactory;
+use App\DB;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -10,6 +11,13 @@ $dotenv->load();
 
 // Iniciando aplicação
 $app = AppFactory::create();
+
+try {
+    // Configurando banco e atribuindo conexão ao $app
+    $app->db = new DB();
+} catch(Throwable $e) {
+    $app->db = null;
+}
 
 // Registrando rotas
 $routes = require __DIR__ . '/../src/routes/api.php';
