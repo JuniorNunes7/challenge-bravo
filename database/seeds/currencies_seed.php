@@ -10,6 +10,6 @@ $dotenv->load();
 
 $db = new DB();
 
-// Criando tabela users, caso não exista
+// Cadastrando moedas
 $db->getConnection()->query('INSERT INTO currencies (currency, usd_value) VALUES
 ("USD", 1), ("BRL", 5.59), ("EUR", 0.83), ("BTC", 0.000016), ("ETH", 0.00041)');

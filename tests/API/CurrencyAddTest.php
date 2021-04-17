@@ -5,7 +5,7 @@ namespace Tests\API;
 use Tests\TestCase;
 use App\DB;
 
-class CurrencyConvertTest extends TestCase
+class CurrencyAddTest extends TestCase
 {
 
     /**
@@ -25,45 +25,43 @@ class CurrencyConvertTest extends TestCase
     }
 
     /**
-     * Test - Currency convert endpoint with right params
+     * Test - Currency add endpoint with right params
      *
      * @return void
      */
-    public function testCurrencyConvertEndpointRightParams()
+    public function testCurrencyAddEndpointRightParams()
     {
-        $request = $this->createRequest('GET', '/currencies');
-        $request = $request->withQueryParams([
-            'from' => 'USD',
-            'to' => 'BRL',
-            'amount' => 1
-        ]);
+        $data = [
+            'currency' => 'CAD',
+            'usd_value' => 0.8
+        ];
+        $request = $this->createRequest('POST', '/currencies', [], $data);
         $response = $this->app->handle($request);
         $this->assertEquals($response->getStatusCode(), 200);
         $body = (string) $response->getBody();
         $this->assertJson($body);
         $body = json_decode($body);
-        $this->assertObjectHasAttribute('total', $body);
-        $this->assertEquals($body->total, 5.59);
+        $this->assertObjectHasAttribute('message', $body);
     }
 
     /**
-     * Test - Currency convert endpoint with wrong params
+     * Test - Currency add endpoint with wrong params
      *
      * @return void
      */
-    public function testCurrencyConvertEndpointWrongParams()
+    public function testCurrencyAddEndpointWrongParams()
     {
-        $request = $this->createRequest('GET', '/currencies');
-        $request = $request->withQueryParams([
-            'from' => 'NOT_EXISTS',
-            'amount' => 'NOT-NUMERIC'
-        ]);
+        $data = [
+            'currency' => 'NOT_EXISTS',
+            'usd_value' => 'NOT_NUMERIC'
+        ];
+        $request = $this->createRequest('POST', '/currencies', [], $data);
         $response = $this->app->handle($request);
         $this->assertEquals($response->getStatusCode(), 400);
         $body = (string) $response->getBody();
         $this->assertJson($body);
         $body = json_decode($body);
         $this->assertObjectHasAttribute('errors', $body);
-        $this->assertArrayHasKey(2, $body->errors);
+        $this->assertArrayHasKey(1, $body->errors);
     }
 }

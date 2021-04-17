@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\Currency;
 use App\Repositories\CurrencyRepository;
 use App\Services\{CurrencyService, ResponseService};
 use Psr\Http\Message\ResponseInterface as Response;
@@ -22,12 +23,14 @@ class CurrencyController extends BaseController
     {
         $data = $request->getQueryParams();
 
+        // Obtendo as moedas cadastradas no banco
         $currencies = (new CurrencyRepository($this->app->db))->getCurrencies();
         $currencies = array_reduce($currencies, function ($result, $currency) {
             $result[$currency->getCurrency()] = $currency->getUsdValue();
             return $result;
         });
 
+        // Validando dados
         $errors = CurrencyService::validateConvertFields($data, array_keys($currencies));
 
         if (!empty($errors)) {
@@ -37,8 +40,40 @@ class CurrencyController extends BaseController
         $usdFromValue = $currencies[$data['from']];
         $usdToValue = $currencies[$data['to']];
 
+        // Obtendo total da conversão
         $total = ($usdToValue/$usdFromValue)*$data['amount'];
 
         return ResponseService::makeResponse($response, 200, ['total' => $total]);
+    }
+
+    /**
+     * Adiciona uma moeda no banco
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function addCurrency(Request $request, Response $response) : Response
+    {
+        $data = $request->getParsedBody();
+
+        // Validando dados
+        $errors = CurrencyService::validateAddFields($data);
+
+        if (!empty($errors)) {
+            return ResponseService::makeResponse($response, 400, ['errors' => $errors]);
+        }
+        
+        // Verificando se a moeda já está registrada no banco
+        $currencyRepo = new CurrencyRepository($this->app->db);
+        if ($currencyRepo->checkCurrencyExists($data['currency'])) {
+            return ResponseService::makeResponse($response, 400, ['errors' => 'O código da moeda já está registrado!']);
+        }
+
+        // Registrando nova moeda no banco
+        $currency = new Currency($data['currency'], (float)$data['usd_value']);
+        $currencyRepo->saveCurrency($currency);
+
+        return ResponseService::makeResponse($response, 200, ['message' => 'A moeda foi adicionada com sucesso!']);
     }
 }

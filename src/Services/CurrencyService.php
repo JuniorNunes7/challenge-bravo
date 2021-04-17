@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Currency;
+
 class CurrencyService
 {
 
@@ -35,6 +37,31 @@ class CurrencyService
             $errors[] = 'O campo "amount" é obrigatório.';
         } else if(!is_numeric($data['amount'])) {
             $errors[] = 'O campo "amount" deve ser um número válido (use . como separador de decimais).';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Faz a validação dos campos passados para adicionar uma moeda
+     *
+     * @param array $data
+     * @return void
+     */
+    public static function validateAddFields(?array $data)
+    {
+        $errors = [];
+
+        if (!isset($data['currency'])) {
+            $errors[] = 'O campo "currency" é obrigatório.';
+        } else if (!in_array($data['currency'], Currency::$availableCurrencies)) {
+            $errors[] = 'A moeda "' . $data['currency'] . '" não é suportada.';
+        }
+
+        if (!isset($data['usd_value'])) {
+            $errors[] = 'O campo "usd_value" é obrigatório.';
+        } else if(!is_numeric($data['usd_value'])) {
+            $errors[] = 'O campo "usd_value" deve ser um número válido (use . como separador de decimais).';
         }
 
         return $errors;

@@ -36,3 +36,7 @@ RUN curl -sS https://getcomposer.org/installer | php && \
  mv composer.phar /usr/local/bin/composer
 
 WORKDIR /var/www
+
+# Permission on database dir (to allow apache2 write in sqlite file)
+RUN chmod -R 775 /var/www/database
+RUN chown -R :www-data /var/www/database

@@ -15,4 +15,14 @@ return function (App $app) {
      */
     $app->get('/currencies', 'App\Controllers\CurrencyController:convertCurrency');
 
+    /**
+     * Adicionar Moeda - Endpoint
+     * 
+     * @url /currencies
+     * @method POST
+     * @bodyParam string currency
+     * @bodyParam float usd_value
+     */
+    $app->post('/currencies', 'App\Controllers\CurrencyController:addCurrency');
+
 };

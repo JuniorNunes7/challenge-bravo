@@ -34,6 +34,19 @@ class CurrencyRepository extends BaseRepository
     }
 
     /**
+     * Verifica se o código da moeda já está registrado
+     *
+     * @param string $currency
+     * @return bool
+     */
+    public function checkCurrencyExists(string $currency) : bool
+    {
+        $stmt = $this->db->prepare('SELECT currency FROM currencies WHERE currency=?');
+        $stmt->execute([$currency]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    /**
      * Obtém as moedas cadastradas no banco de dados
      *
      * @return array

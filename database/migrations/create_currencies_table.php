@@ -15,6 +15,6 @@ $db->getConnection()->query('DROP TABLE IF EXISTS currencies');
 
 // Criando tabela users, caso não exista
 $db->getConnection()->query('CREATE TABLE IF NOT EXISTS currencies (
-    currency VARCHAR(3) UNIQUE PRIMARY KEY,
+    currency VARCHAR(5) UNIQUE PRIMARY KEY,
     usd_value FLOAT
 )');

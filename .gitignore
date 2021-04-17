@@ -2,3 +2,4 @@
 .editorconfig
 .env
 database/*.db
+.phpunit.result.cache

@@ -18,9 +18,9 @@ Suba o container:
 docker-compose up -d
 ```
 
-Instale as dependências:
+Instale as dependências e gere o banco inicial:
 ```sh
-docker-compose run webserver composer install
+docker-compose run webserver composer install && composer migrate
 ```
 
 A aplicação estará disponível no endereço: http://localhost:8000.

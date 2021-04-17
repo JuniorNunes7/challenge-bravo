@@ -25,7 +25,11 @@ class DB
         $database = $_ENV['DB_DATABASE'] ?? null;
 
         try {
-            $conn = new PDO('sqlite:' . __DIR__ . '/../' . $database);
+            if ($_ENV['APP_ENV'] !== 'testing') {
+                $conn = new PDO('sqlite:' . __DIR__ . '/../' . $database);
+            } else {
+                $conn = new PDO('sqlite:' . $database);
+            }
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch(Throwable $e) {
