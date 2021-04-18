@@ -23,6 +23,12 @@ Instale as dependências e gere o banco inicial:
 docker-compose run webserver composer install && composer migrate
 ```
 
+Dê as permissões necessários no banco criado, para que o apache possa escrever:
+```sh
+chown -R :www-data database/hurb-challenge.db
+chmod 664 database/hurb-challenge.db
+```
+
 A aplicação estará disponível no endereço: http://localhost:8000.
 ```sh
 # Converção
@@ -54,6 +60,28 @@ Rode as migrations e seeds:
 composer migrate
 ```
 
+## Setup de Sincronização
+
+Crie um cron para sincronizar as taxas de câmbio de tempos em tempos:
+```sh
+crontab -e
+```
+
+Configure um cron de hora em hora no editor:
+
+#### Projeto rodando no Docker:
+```sh
+0 * * * * cd /caminho/do/projeto && docker-compose exec webserver composer sync
+```
+#### Projeto rodando Local:
+```sh
+0 * * * * cd /caminho/do/projeto && composer sync >/dev/null 2>&1
+```
+<sub>Dependendo das configurações, será necessário definir o caminho completo dos comandos.</sub>
+
+##
+
+
 ## Comandos
 
 Rodar testes:
@@ -66,6 +94,16 @@ Iniciar projeto utilizando php-cli:
 composer start
 ```
 
+Configurar/Limpar banco:
+```sh
+composer migrate
+```
+
+Sincronizar taxas de câmbio:
+```sh
+composer sync
+```
+
 ## Endpoints
 
 ```
@@ -74,3 +112,10 @@ GET /currencies
 POST /currencies
 DELETE /currencies/{currency}
 ```
+
+## Informações adicionais
+---
+
+#### A atualização das taxas de câmbio está acontecendo de hora em hora, através de um cron configurado dentro do Dockerfile. Não é possível aumentar, pois a API utilizada para consulta é gratuita, e só disponibiliza 1000 requisições por mês. O cálculo feito foi: 1000/31 = 32 requisições por dia (arredondando pra baixo), levando em consideração os testes (que fazem requisição também, 24 requisições por dia seria um número seguro).
+
+---
