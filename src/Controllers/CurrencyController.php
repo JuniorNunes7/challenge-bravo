@@ -34,7 +34,7 @@ class CurrencyController extends BaseController
         $errors = CurrencyService::validateConvertFields($data, array_keys($currencies));
 
         if (!empty($errors)) {
-            return ResponseService::makeResponse($response, 400, ['errors' => $errors]);
+            return ResponseService::makeResponse($response, 400, ['message' => $errors]);
         }
 
         $usdFromValue = $currencies[$data['from']];
@@ -61,13 +61,13 @@ class CurrencyController extends BaseController
         $errors = CurrencyService::validateAddFields($data);
 
         if (!empty($errors)) {
-            return ResponseService::makeResponse($response, 400, ['errors' => $errors]);
+            return ResponseService::makeResponse($response, 400, ['message' => $errors]);
         }
         
         // Verificando se a moeda já está registrada no banco
         $currencyRepo = new CurrencyRepository($this->app->db);
         if ($currencyRepo->checkCurrencyExists($data['currency'])) {
-            return ResponseService::makeResponse($response, 400, ['errors' => 'O código da moeda já está registrado!']);
+            return ResponseService::makeResponse($response, 400, ['message' => 'O código da moeda já está registrado!']);
         }
 
         // Registrando nova moeda no banco
@@ -96,7 +96,7 @@ class CurrencyController extends BaseController
         // Verificando se a moeda está registrada no banco
         $currencyRepo = new CurrencyRepository($this->app->db);
         if (!$currencyRepo->checkCurrencyExists($currency)) {
-            return ResponseService::makeResponse($response, 400, ['errors' => 'A moeda "' . $currency . '" não foi encontrada!']);
+            return ResponseService::makeResponse($response, 400, ['message' => 'A moeda "' . $currency . '" não foi encontrada!']);
         }
 
         // Removendo moeda
