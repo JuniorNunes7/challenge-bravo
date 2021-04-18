@@ -104,6 +104,32 @@ Sincronizar taxas de câmbio:
 composer sync
 ```
 
+## Estrutura do Projeto
+```
+├── database - Arquivos de banco de dados.
+│   ├── migrations - Scripts para criar as tabelas do banco de dados.
+│   └── seeds - Scripts para criar registros iniciais no banco de dados.
+│
+├── docker-compose - Arquivos de configuração do container.
+│   └── apache2 - Arquivos de configuração do apache2.
+│
+├── public - Pasta pública.
+│   └── docs - Arquivos com a documentação da API.
+│
+├── src - Arquivos do sistema.
+│   ├── Controllers - Controladores do sistema.
+│   ├── Models - Modelos do sistema.
+│   ├── Repositories - Repositórios do sistema.
+│   ├── routes - Rotas do sistema.
+│   └── Services - Classes de serviços para auxiliar na lógica extra.
+│
+├── sync - Arquivos de sincronização.
+|
+├── tests - Testes do sistema.
+│   ├── API - Testes dos endpoints da API.
+│   └── Unit - Testes unitários com componentes do sistema.
+```
+
 ## Endpoints
 
 ```
