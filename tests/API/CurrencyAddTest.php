@@ -61,7 +61,7 @@ class CurrencyAddTest extends TestCase
         $body = (string) $response->getBody();
         $this->assertJson($body);
         $body = json_decode($body);
-        $this->assertObjectHasAttribute('errors', $body);
-        $this->assertArrayHasKey(1, $body->errors);
+        $this->assertObjectHasAttribute('message', $body);
+        $this->assertArrayHasKey(1, $body->message);
     }
 }
