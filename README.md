@@ -23,10 +23,9 @@ Instale as dependências e gere o banco inicial:
 docker-compose run webserver composer install && composer migrate
 ```
 
-Dê as permissões necessários no banco criado, para que o apache possa escrever:
+Dê as permissões necessárias no banco criado, para que o apache possa escrever:
 ```sh
-chown -R :www-data database/hurb-challenge.db
-chmod 664 database/hurb-challenge.db
+chmod 666 database/hurb-challenge.db
 ```
 
 A aplicação estará disponível no endereço: http://localhost:8000.
@@ -35,7 +34,7 @@ A aplicação estará disponível no endereço: http://localhost:8000.
 curl 'http://localhost:8000/currencies?from=USD&to=BRL&amount=30'
 
 # Adicionar Moeda
-curl 'http://localhost:8000/currencies' -X 'POST' -d 'currency=CAD&usd_value=0.80'
+curl 'http://localhost:8000/currencies' -X 'POST' -d 'currency=CAD&usd_value=1.23'
 
 # Remover Moeda
 curl 'http://localhost:8000/currencies/CAD' -X 'DELETE'
