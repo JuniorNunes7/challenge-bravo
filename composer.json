@@ -11,7 +11,8 @@
         "slim/slim": "^4.0",
         "slim/psr7": "^1.3",
         "vlucas/phpdotenv": "^5.3",
-        "guzzlehttp/guzzle": "^7.3"
+        "guzzlehttp/guzzle": "^7.3",
+        "tuupola/slim-jwt-auth": "^3.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
@@ -33,6 +34,7 @@
         ],
         "tests": "vendor/bin/phpunit --do-not-cache-result",
         "migrate": "php database/migrations/create_currencies_table.php && php database/seeds/currencies_seed.php",
-        "sync": "php sync/currency_sync.php"
+        "sync": "php sync/currency_sync.php",
+        "docker": "cp -n .env.example .env && docker-compose up -d"
     }
 }

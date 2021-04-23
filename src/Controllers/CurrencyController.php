@@ -74,7 +74,7 @@ class CurrencyController extends BaseController
         $currency = new Currency($data['currency'], (float)$data['usd_value']);
         $currencyRepo->saveCurrency($currency);
 
-        return ResponseService::makeResponse($response, 200, ['message' => 'A moeda foi adicionada com sucesso!']);
+        return ResponseService::makeResponse($response, 201, ['message' => 'A moeda foi adicionada com sucesso!']);
     }
 
     /**
